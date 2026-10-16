@@ -27,6 +27,31 @@ export const home: HomePage = {
         answer:
           'Real estate executives who share a passion for golf and meaningful relationships. See the 2026 Player Bios page to review past attendees.',
       },
+      {
+        question: 'What is the format?',
+        answer:
+          'The Invitational is a three-day, Ryder Cup-style team match-play competition. Two teams of 12 compete across singles matches, where players face the corresponding seed from the opposing team, and four-ball (best ball) matches, where partners each play their own ball and the lower score counts on every hole. The final day closes with a live Ryder Cup-style call-out and handicapped singles.',
+      },
+      {
+        question: 'How are the teams chosen?',
+        answer:
+          'Two captains are selected before the tournament and revealed on draft day. At the opening lunch, the captains take turns picking players in a snake draft until all 24 players have a side.',
+      },
+      {
+        question: 'How are points awarded?',
+        answer:
+          'Each best-ball match is worth 3 points: one for the front nine, one for the back nine, and one overall. Each singles match is worth 2 points to the winner. The final day’s singles are played with handicaps, giving every player a chance to contribute, and every point counts toward the team championship.',
+      },
+      {
+        question: 'Where is it played?',
+        answer:
+          'The 2026 Invitational was held September 14–16 at Bronze Buffalo Ranch in Victor, Idaho, on the quiet side of the Tetons and just 30 minutes from Jackson Hole. Players stay on the property in Lodge suites, private mountain cabins, and condominiums, with dining, a full-service spa, and fitness facilities on site.',
+      },
+      {
+        question: 'How can I attend?',
+        answer:
+          'The Invitational is a private, invitation-only gathering for a select group of real estate executives. Join the waitlist and we’ll reach out as soon as registration opens for next year’s tournament.',
+      },
     ],
   },
 

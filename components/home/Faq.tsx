@@ -14,7 +14,7 @@ export default function Faq({ heading, items }: HomePage['faq']) {
           {items.map((item, i) => (
             <li key={item.question} data-reveal="up" style={revealDelay(0.1 + i * 0.07)} className="border-b border-rule">
               <details className="group">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 pt-[41px] pb-10 pr-3 md:pr-8 [&::-webkit-details-marker]:hidden">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 pt-[41px] pb-10 pr-3 group-open:pb-6 md:pr-8 [&::-webkit-details-marker]:hidden">
                   <span className="text-[20px] leading-[28px] font-medium tracking-[-0.02em] text-ink md:text-[28px]">
                     {item.question}
                   </span>
@@ -27,7 +27,7 @@ export default function Faq({ heading, items }: HomePage['faq']) {
                   />
                 </summary>
                 {item.answer && (
-                  <p className="-mt-4 pb-10 pr-12 text-[18px] leading-[28px] tracking-[0.01em] whitespace-pre-line text-ink/75 md:text-[20px] md:leading-[32px]">
+                  <p className="pb-10 pr-12 text-[18px] leading-[28px] tracking-[0.01em] whitespace-pre-line text-ink/75 md:text-[20px] md:leading-[32px]">
                     {item.answer}
                   </p>
                 )}
