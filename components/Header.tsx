@@ -1,20 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { stegaClean } from 'next-sanity'
 import { useEffect, useState } from 'react'
-import type { SiteSettingsQueryResult } from '@/sanity/types'
-import SanityImage from './SanityImage'
+import type { NavMenu, SiteSettings } from '@/content/types'
+import Photo from './Photo'
 
-type Settings = NonNullable<SiteSettingsQueryResult>
-type NavMenu = NonNullable<Settings['navMenus']>[number]
-
-type Props = {
-  logo: Settings['logo'] | undefined
-  logoText: Settings['logoText'] | undefined
-  menuLabel: string | null | undefined
-  navMenus: Settings['navMenus'] | undefined
-}
+type Props = Pick<SiteSettings, 'logo' | 'logoText' | 'menuLabel' | 'navMenus'>
 
 export default function Header({ logo, logoText, menuLabel, navMenus }: Props) {
   const [open, setOpen] = useState(false)
@@ -32,7 +23,7 @@ export default function Header({ logo, logoText, menuLabel, navMenus }: Props) {
     }
   }, [open])
 
-  const menus = navMenus ?? []
+  const menus = navMenus
   const brand = <Logo logo={logo} logoText={logoText} />
 
   return (
@@ -43,7 +34,7 @@ export default function Header({ logo, logoText, menuLabel, navMenus }: Props) {
 
       <button
         type="button"
-        aria-label={stegaClean(menuLabel) ?? undefined}
+        aria-label={menuLabel}
         aria-expanded={open}
         aria-controls="site-menu"
         onClick={() => setOpen(true)}
@@ -84,9 +75,9 @@ export default function Header({ logo, logoText, menuLabel, navMenus }: Props) {
           <div className="space-y-10">
             {menus.map((menu, m) => {
               // Running position in the menu, so every label and link staggers in order
-              const start = menus.slice(0, m).reduce((n, prev) => n + 1 + Math.max(prev.links?.length ?? 0, 1), 0)
+              const start = menus.slice(0, m).reduce((n, prev) => n + 1 + Math.max(prev.links.length, 1), 0)
               return (
-                <div key={menu._key}>
+                <div key={menu.label}>
                   <p
                     className="menu-stagger text-[14px] leading-[20px] font-semibold tracking-[0.08em] text-ink/50 uppercase"
                     style={stagger(start)}
@@ -103,7 +94,7 @@ export default function Header({ logo, logoText, menuLabel, navMenus }: Props) {
             href="/"
             onClick={close}
             className="menu-stagger mt-auto pt-12"
-            style={stagger(menus.reduce((n, menu) => n + 1 + Math.max(menu.links?.length ?? 0, 1), 0))}
+            style={stagger(menus.reduce((n, menu) => n + 1 + Math.max(menu.links.length, 1), 0))}
           >
             {brand}
           </Link>
@@ -117,13 +108,11 @@ function Logo({ logo, logoText }: Pick<Props, 'logo' | 'logoText'>) {
   return (
     <span className="flex items-center gap-[9px] md:gap-[11px]">
       <span className="relative block h-[52.778px] w-[53.762px] md:h-[43.174px] md:w-[69.642px]">
-        <SanityImage image={logo} sizes="70px" className="object-contain" priority />
+        <Photo image={logo} sizes="70px" className="object-contain" priority />
       </span>
-      {logoText && (
-        <span className="block w-[139px] text-[16.096px] leading-[13.735px] font-semibold text-ink uppercase md:w-[283px] md:text-[20.85px] md:leading-[17.792px]">
-          {logoText.prefix} <span className="text-muted">{logoText.highlight}</span> {logoText.suffix}
-        </span>
-      )}
+      <span className="block w-[139px] text-[16.096px] leading-[13.735px] font-semibold text-ink uppercase md:w-[283px] md:text-[20.85px] md:leading-[17.792px]">
+        {logoText.prefix} <span className="text-muted">{logoText.highlight}</span> {logoText.suffix}
+      </span>
     </span>
   )
 }
@@ -141,7 +130,7 @@ function MenuLinks({
   startIndex: number
   className?: string
 }) {
-  if (!menu.links?.length) {
+  if (!menu.links.length) {
     return menu.emptyText ? (
       <div className={className}>
         <p className="menu-stagger py-2 text-[20px] leading-[28px] text-ink/50" style={stagger(startIndex)}>
@@ -153,9 +142,9 @@ function MenuLinks({
   return (
     <ul className={className}>
       {menu.links.map((link, i) => (
-        <li key={link._key} className="menu-stagger" style={stagger(startIndex + i)}>
+        <li key={link.href} className="menu-stagger" style={stagger(startIndex + i)}>
           <Link
-            href={stegaClean(link.href) ?? '/'}
+            href={link.href}
             onClick={onNavigate}
             className="block py-1 text-[36px] leading-[48px] font-medium tracking-[-0.02em] text-ink transition-colors hover:text-forest md:text-[40px]"
           >

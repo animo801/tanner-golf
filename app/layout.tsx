@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter_Tight } from 'next/font/google'
-import { sanityFetch } from '@/sanity/lib/live'
-import { siteSettingsQuery } from '@/sanity/lib/queries'
+import { home } from '@/content/home'
+import { site } from '@/content/site'
 import './globals.css'
 
 const interTight = Inter_Tight({
@@ -10,12 +10,21 @@ const interTight = Inter_Tight({
   weight: ['400', '500', '600', '900'],
 })
 
-export async function generateMetadata(): Promise<Metadata> {
-  const { data } = await sanityFetch({ query: siteSettingsQuery, stega: false })
-  return {
-    title: data?.siteTitle ?? undefined,
-    description: data?.siteDescription ?? undefined,
-  }
+// Link previews (iMessage, Slack, social) use the home page hero. On Vercel, Next
+// resolves the image to an absolute URL from the deployment's own domain.
+const shareImage = { url: home.hero.image.src, alt: home.hero.image.alt }
+
+export const metadata: Metadata = {
+  title: site.siteTitle,
+  description: site.siteDescription,
+  openGraph: {
+    type: 'website',
+    siteName: site.siteTitle,
+    title: site.siteTitle,
+    description: site.siteDescription,
+    images: [shareImage],
+  },
+  twitter: { card: 'summary_large_image', images: [shareImage] },
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

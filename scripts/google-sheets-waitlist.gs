@@ -12,6 +12,7 @@
  *   Submitted At | First Name | Last Name | Email | Phone | Brokerage / Company | Message
  * Columns are matched by header name, so they can be reordered, and extra
  * columns (e.g. "Status" or "Notes" for your client) are left alone.
+ * An email that's already on the sheet is skipped (and still reported as ok).
  */
 
 const SECRET = 'replace-with-a-long-random-string'
@@ -42,6 +43,7 @@ function doPost(e) {
   try {
     const sheet = getSheet()
     const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0]
+    if (isDuplicate(sheet, headers, body.entry.email)) return json({ ok: true, duplicate: true })
     const row = headers.map((header) => {
       const key = COLUMNS[String(header).trim()]
       if (!key) return ''
@@ -53,6 +55,17 @@ function doPost(e) {
   } finally {
     lock.releaseLock()
   }
+}
+
+function isDuplicate(sheet, headers, email) {
+  const col = headers.findIndex((h) => String(h).trim() === 'Email')
+  const rows = sheet.getLastRow() - 1
+  if (col < 0 || rows < 1 || !email) return false
+  const target = String(email).trim().toLowerCase()
+  return sheet
+    .getRange(2, col + 1, rows, 1)
+    .getValues()
+    .some(([value]) => String(value).trim().toLowerCase() === target)
 }
 
 function getSheet() {

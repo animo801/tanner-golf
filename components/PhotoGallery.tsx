@@ -1,14 +1,11 @@
 'use client'
 
 import Image from 'next/image'
-import { stegaClean } from 'next-sanity'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { urlFor } from '@/sanity/lib/image'
-import SanityImage, { type SanityImageValue } from './SanityImage'
+import type { Photo as PhotoValue } from '@/content/types'
+import Photo from './Photo'
 
-type Photo = NonNullable<SanityImageValue> & { _key: string }
-
-export default function PhotoGallery({ photos }: { photos: Photo[] }) {
+export default function PhotoGallery({ photos }: { photos: PhotoValue[] }) {
   // Index of the photo shown full screen, or null when the viewer is closed
   const [openAt, setOpenAt] = useState<number | null>(null)
 
@@ -16,14 +13,14 @@ export default function PhotoGallery({ photos }: { photos: Photo[] }) {
     <>
       <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
         {photos.map((photo, i) => (
-          <li key={photo._key}>
+          <li key={photo.src}>
             <button
               type="button"
               onClick={() => setOpenAt(i)}
-              aria-label={stegaClean(photo.alt) || `Photo ${i + 1}`}
+              aria-label={photo.alt || `Photo ${i + 1}`}
               className="relative block aspect-[378/282] w-full cursor-zoom-in overflow-hidden bg-[#d9d9d9] md:rounded-xl"
             >
-              <SanityImage
+              <Photo
                 image={photo}
                 sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                 className="object-cover transition-transform duration-500 hover:scale-[1.03]"
@@ -37,7 +34,7 @@ export default function PhotoGallery({ photos }: { photos: Photo[] }) {
   )
 }
 
-function Lightbox({ photos, startAt, onClose }: { photos: Photo[]; startAt: number; onClose: () => void }) {
+function Lightbox({ photos, startAt, onClose }: { photos: PhotoValue[]; startAt: number; onClose: () => void }) {
   const track = useRef<HTMLDivElement>(null)
   const [index, setIndex] = useState(startAt)
 
@@ -81,11 +78,11 @@ function Lightbox({ photos, startAt, onClose }: { photos: Photo[]; startAt: numb
         className="flex h-full snap-x snap-mandatory overflow-x-auto overscroll-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {photos.map((photo, i) => (
-          <div key={photo._key} className="relative h-full w-full shrink-0 snap-center snap-always">
-            {photo.asset && Math.abs(i - index) <= 1 && (
+          <div key={photo.src} className="relative h-full w-full shrink-0 snap-center snap-always">
+            {Math.abs(i - index) <= 1 && (
               <Image
-                src={urlFor(photo).width(2400).url()}
-                alt={stegaClean(photo.alt) ?? ''}
+                src={photo.src}
+                alt={photo.alt}
                 fill
                 sizes="100vw"
                 className="object-contain md:p-12"

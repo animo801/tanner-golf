@@ -1,12 +1,13 @@
 'use client'
 
-import { PortableText } from '@portabletext/react'
 import { useEffect, useRef } from 'react'
-import SanityImage from './SanityImage'
-import type { Player } from './TeamRosters'
+import type { Player, PlayerBiosPage } from '@/content/types'
+import Photo from './Photo'
 
 // Native <dialog> gives us Escape-to-close, focus trapping and a backdrop for free
-export default function PlayerBioModal({ player, onClose }: { player: Player; onClose: () => void }) {
+type Props = { player: Player; labels: PlayerBiosPage['labels']; onClose: () => void }
+
+export default function PlayerBioModal({ player, labels, onClose }: Props) {
   const dialog = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
@@ -23,21 +24,41 @@ export default function PlayerBioModal({ player, onClose }: { player: Player; on
       onClose={onClose}
       // Clicking the backdrop (the dialog element itself, outside the panel) closes it
       onClick={(e) => e.target === dialog.current && dialog.current.close()}
-      aria-label={player.name ?? undefined}
+      aria-label={player.name}
       className="m-auto max-h-[calc(100dvh-24px)] w-[calc(100%-24px)] max-w-[860px] overflow-hidden bg-white p-0 text-ink backdrop:bg-black/60 md:max-h-[calc(100dvh-64px)]"
     >
       <div className="grid max-h-[inherit] overflow-y-auto md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <div className="relative aspect-[185/192] bg-[#d9d9d9] md:aspect-auto md:min-h-[440px]">
-          <SanityImage image={player.photo} sizes="(min-width: 768px) 360px, 100vw" />
+        {/* Framed like the magazine, so the photo is never cropped tighter than its own 3:4 */}
+        <div className="md:pt-10 md:pl-10">
+          <div className="relative aspect-[3/4] overflow-hidden bg-[#d9d9d9]">
+            <Photo image={player.photo} sizes="(min-width: 768px) 320px, 100vw" />
+          </div>
         </div>
         <div className="px-6 pt-6 pb-8 md:px-10 md:pt-10 md:pb-12">
           <h2 className="pr-10 text-[24px] leading-[28px] font-semibold uppercase md:text-[32px] md:leading-[36px]">
             {player.name}
           </h2>
           {player.role && <p className="mt-1 text-[16px] leading-[24px] text-ink/60 md:text-[18px]">{player.role}</p>}
+          {(player.homeCourse || player.handicap) && (
+            <dl className="mt-5 grid grid-cols-[1fr_auto] gap-2 md:mt-6">
+              {[
+                [labels.homeCourse, player.homeCourse],
+                [labels.handicap, player.handicap],
+              ].map(([label, value]) =>
+                value ? (
+                  <div key={label} className="rounded-md bg-forest/5 px-4 py-3">
+                    <dt className="text-[12px] leading-[16px] font-semibold tracking-[0.08em] text-ink/50 uppercase">{label}</dt>
+                    <dd className="mt-1 text-[16px] leading-[22px] text-ink md:text-[18px]">{value}</dd>
+                  </div>
+                ) : null,
+              )}
+            </dl>
+          )}
           {player.bio && (
             <div className="mt-5 space-y-[1lh] text-[16px] leading-[26px] tracking-[-0.01em] md:mt-6 md:text-[18px] md:leading-[30px]">
-              <PortableText value={player.bio} />
+              {player.bio.map((paragraph, i) => (
+                <p key={i}>{paragraph}</p>
+              ))}
             </div>
           )}
         </div>

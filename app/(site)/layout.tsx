@@ -1,26 +1,13 @@
-import { draftMode } from 'next/headers'
-import { VisualEditing } from 'next-sanity/visual-editing'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
-import { SanityLive, sanityFetch } from '@/sanity/lib/live'
-import { siteSettingsQuery } from '@/sanity/lib/queries'
+import { site } from '@/content/site'
 
-export default async function SiteLayout({ children }: { children: React.ReactNode }) {
-  const { isEnabled } = await draftMode()
-  const { data: settings } = await sanityFetch({ query: siteSettingsQuery })
-
+export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
     <div>
-      <Header
-        logo={settings?.logo}
-        logoText={settings?.logoText}
-        menuLabel={settings?.menuLabel}
-        navMenus={settings?.navMenus}
-      />
+      <Header logo={site.logo} logoText={site.logoText} menuLabel={site.menuLabel} navMenus={site.navMenus} />
       {children}
-      <Footer settings={settings} />
-      <SanityLive />
-      {isEnabled && <VisualEditing />}
+      <Footer settings={site} />
     </div>
   )
 }

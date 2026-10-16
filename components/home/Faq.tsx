@@ -1,14 +1,7 @@
-import type { HomePageQueryResult } from '@/sanity/types'
+import type { HomePage } from '@/content/types'
 import { revealDelay } from '../intro/reveal'
 
-type FaqData = NonNullable<NonNullable<HomePageQueryResult>['faq']>
-
-type Props = {
-  heading: FaqData['heading'] | undefined
-  items: FaqData['items'] | undefined
-}
-
-export default function Faq({ heading, items }: Props) {
+export default function Faq({ heading, items }: HomePage['faq']) {
   return (
     <section id="faq" className="px-3 pt-[70px] pb-[70px] md:px-10 md:pt-[120px] md:pb-[120px] lg:pl-[144px]">
       {heading && (
@@ -16,10 +9,10 @@ export default function Faq({ heading, items }: Props) {
           {heading}
         </h2>
       )}
-      {items && items.length > 0 && (
+      {items.length > 0 && (
         <ul className="mt-[31px] max-w-[855px] border-t border-rule md:mt-[72px]">
           {items.map((item, i) => (
-            <li key={item._key} data-reveal="up" style={revealDelay(0.1 + i * 0.07)} className="border-b border-rule">
+            <li key={item.question} data-reveal="up" style={revealDelay(0.1 + i * 0.07)} className="border-b border-rule">
               <details className="group">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-6 pt-[41px] pb-10 pr-3 md:pr-8 [&::-webkit-details-marker]:hidden">
                   <span className="text-[20px] leading-[28px] font-medium tracking-[-0.02em] text-ink md:text-[28px]">

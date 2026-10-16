@@ -2,23 +2,23 @@
 
 import { useActionState } from 'react'
 import { joinWaitlist, type WaitlistState } from '@/app/(site)/waitlist/actions'
-import type { WaitlistPageQueryResult } from '@/sanity/types'
+import type { WaitlistPage } from '@/content/types'
 
-type FormCopy = NonNullable<NonNullable<WaitlistPageQueryResult>['form']>
+type FormCopy = WaitlistPage['form']
 
 const inputClass =
   'mt-2 block w-full rounded-lg border border-rule bg-white px-4 py-3 text-[18px] leading-[28px] text-ink outline-none transition-colors focus:border-forest focus:ring-2 focus:ring-forest/20'
 
-export default function WaitlistForm({ copy }: { copy: FormCopy | null | undefined }) {
+export default function WaitlistForm({ copy }: { copy: FormCopy }) {
   const [state, action, pending] = useActionState<WaitlistState, FormData>(joinWaitlist, { status: 'idle' })
 
   if (state.status === 'success') {
     return (
       <div role="status" className="rounded-[8.673px] bg-forest px-6 py-12 text-white md:rounded-xl md:px-12 md:py-16">
-        {copy?.successHeading && (
+        {copy.successHeading && (
           <h2 className="text-[28px] leading-[32px] font-semibold uppercase md:text-[40px] md:leading-[44px]">{copy.successHeading}</h2>
         )}
-        {copy?.successMessage && (
+        {copy.successMessage && (
           <p className="mt-4 max-w-[560px] text-[18px] leading-[28px] whitespace-pre-line md:text-[20px] md:leading-[32px]">
             {copy.successMessage}
           </p>
@@ -27,24 +27,24 @@ export default function WaitlistForm({ copy }: { copy: FormCopy | null | undefin
     )
   }
 
-  const errorText = state.error && copy?.[`${state.error}Error` as const]
+  const errorText = state.error && copy[`${state.error}Error` as const]
   const v = state.values
 
   return (
     <form action={action} className="grid gap-5 md:grid-cols-2 md:gap-x-4 md:gap-y-6">
-      <Field label={copy?.firstNameLabel} name="firstName" defaultValue={v?.firstName} autoComplete="given-name" required />
-      <Field label={copy?.lastNameLabel} name="lastName" defaultValue={v?.lastName} autoComplete="family-name" required />
-      <Field label={copy?.emailLabel} name="email" defaultValue={v?.email} type="email" autoComplete="email" required />
-      <Field label={copy?.phoneLabel} name="phone" defaultValue={v?.phone} type="tel" autoComplete="tel" optionalText={copy?.optionalText} />
+      <Field label={copy.firstNameLabel} name="firstName" defaultValue={v?.firstName} autoComplete="given-name" required />
+      <Field label={copy.lastNameLabel} name="lastName" defaultValue={v?.lastName} autoComplete="family-name" required />
+      <Field label={copy.emailLabel} name="email" defaultValue={v?.email} type="email" autoComplete="email" required />
+      <Field label={copy.phoneLabel} name="phone" defaultValue={v?.phone} type="tel" autoComplete="tel" optionalText={copy.optionalText} />
       <Field
-        label={copy?.companyLabel}
+        label={copy.companyLabel}
         name="company" defaultValue={v?.company}
         autoComplete="organization"
-        optionalText={copy?.optionalText}
+        optionalText={copy.optionalText}
         className="md:col-span-2"
       />
       <label className="block md:col-span-2">
-        <LabelText label={copy?.messageLabel} optionalText={copy?.optionalText} />
+        <LabelText label={copy.messageLabel} optionalText={copy.optionalText} />
         <textarea name="message" defaultValue={v?.message} rows={4} maxLength={2000} className={inputClass} />
       </label>
 
@@ -57,7 +57,7 @@ export default function WaitlistForm({ copy }: { copy: FormCopy | null | undefin
           disabled={pending}
           className="h-[52px] cursor-pointer bg-forest px-10 text-[16px] font-semibold text-white uppercase transition-colors hover:bg-[#123d1e] disabled:cursor-wait disabled:opacity-70"
         >
-          {pending ? copy?.submittingLabel : copy?.submitLabel}
+          {pending ? copy.submittingLabel : copy.submitLabel}
         </button>
         {errorText && (
           <p role="alert" className="text-[16px] leading-[24px] text-[#b42318]">

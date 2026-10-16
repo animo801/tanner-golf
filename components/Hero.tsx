@@ -1,13 +1,13 @@
-import { urlFor } from '@/sanity/lib/image'
+import type { Photo as PhotoValue } from '@/content/types'
+import Photo from './Photo'
 import SplitLines from './intro/SplitLines'
-import SanityImage, { type SanityImageValue } from './SanityImage'
 
 type Props = {
-  heading: string | null | undefined
-  eyebrow?: string | null
-  image: SanityImageValue | undefined
+  heading: string
+  eyebrow?: string
+  image: PhotoValue
   // Muted looping background video; `image` becomes its poster
-  video?: { url: string | null | undefined; type: string | null | undefined }
+  video?: { src: string; type: string }
   // 30% shorter, cropped to show the bottom of the photo
   short?: boolean
   // Split the heading into lines for the home page intro animation
@@ -15,7 +15,7 @@ type Props = {
 }
 
 export default function Hero({ heading, eyebrow, image, video, short, intro }: Props) {
-  const videoUrl = video?.url
+  const videoUrl = video?.src
 
   return (
     <section
@@ -38,13 +38,13 @@ export default function Hero({ heading, eyebrow, image, video, short, intro }: P
               loop
               playsInline
               preload="auto"
-              poster={image?.asset ? urlFor(image).width(1600).url() : undefined}
+              poster={image.src}
               className="absolute inset-0 size-full object-cover"
             >
-              <source src={videoUrl} type={video?.type ?? undefined} />
+              <source src={videoUrl} type={video?.type} />
             </video>
           ) : (
-            <SanityImage image={image} sizes="(min-width: 768px) 100vw, 800px" priority />
+            <Photo image={image} sizes="(min-width: 768px) 100vw, 800px" priority />
           )}
           {videoUrl ? (
             // The Figma overlay is shaped to the photo's treeline, so video gets a plain gradient

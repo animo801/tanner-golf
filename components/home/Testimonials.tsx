@@ -1,21 +1,14 @@
 'use client'
 
 import { useRef } from 'react'
-import type { HomePageQueryResult } from '@/sanity/types'
+import type { HomePage } from '@/content/types'
 import { revealDelay } from '../intro/reveal'
-import SanityImage from '../SanityImage'
+import Photo from '../Photo'
 
-type TestimonialsData = NonNullable<NonNullable<HomePageQueryResult>['testimonials']>
-
-type Props = {
-  heading: TestimonialsData['heading'] | undefined
-  items: TestimonialsData['items'] | undefined
-}
-
-export default function Testimonials({ heading, items }: Props) {
+export default function Testimonials({ heading, items }: HomePage['testimonials']) {
   const scroller = useRef<HTMLUListElement>(null)
 
-  if (!items?.length) return null
+  if (!items.length) return null
 
   const scrollByCard = (dir: 1 | -1) => {
     const el = scroller.current
@@ -59,7 +52,7 @@ export default function Testimonials({ heading, items }: Props) {
       >
         {items.map((item, i) => (
           <li
-            key={item._key}
+            key={item.name}
             data-reveal="up"
             style={revealDelay(0.15 + i * 0.08)}
             className="flex w-[calc(100%-48px)] shrink-0 snap-start flex-col justify-between gap-10 rounded-[8.673px] bg-[#e4e4e4] p-6 text-ink md:w-[45%] md:rounded-xl md:p-10 lg:w-[34%]"
@@ -68,13 +61,13 @@ export default function Testimonials({ heading, items }: Props) {
               {item.quote}
             </blockquote>
             <div className="flex items-center gap-4">
-              {item.photo?.asset && (
+              {item.photo && (
                 <span className="relative size-12 shrink-0 overflow-hidden rounded-full">
-                  <SanityImage image={item.photo} sizes="48px" />
+                  <Photo image={item.photo} sizes="48px" />
                 </span>
               )}
               <div>
-                {item.name && <p className="text-[18px] leading-[24px] font-semibold tracking-[0.01em]">{item.name}</p>}
+                <p className="text-[18px] leading-[24px] font-semibold tracking-[0.01em]">{item.name}</p>
                 {item.role && <p className="text-[16px] leading-[22px] tracking-[0.01em] text-ink/60">{item.role}</p>}
               </div>
             </div>
