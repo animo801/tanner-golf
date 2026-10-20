@@ -4,26 +4,25 @@ export const course: CoursePage = {
   title: 'Course',
   hero: {
     eyebrow: '2026 Course',
-    heading: 'Brockcreek Farms',
+    heading: 'Bronze Buffalo Ranch',
     poster: { src: '/images/home/hero.jpg', alt: 'Aerial view of the golf course' },
     // Optional muted looping video, e.g. { src: '/videos/2026-course.mp4', type: 'video/mp4' }
   },
   about: {
     heading: 'About the course',
     body: [
-      'This is a thing... this is what we want it to be. We like doing things so that they are clear. And this is a good example of one of those things. So lets try it. Lets see what we can do. This is nonsense... but it seems to work.',
-      'This is a thing... this is what we want it to be. We like doing things so that they are clear. And this is a good example of one of those things. So lets try it. Lets see',
+      'Nestled in the breathtaking Teton Valley of Victor, Idaho, Bronze Buffalo Ranch is a luxury mountain retreat where championship golf, Western hospitality, and natural beauty come together. Surrounded by panoramic mountain views, the Ranch features an acclaimed 18-hole championship golf course with rolling fairways, pristine greens, and spectacular scenery, offering an unforgettable golf experience in one of the West’s most remarkable settings.',
+      'Beyond the fairways, Bronze Buffalo Ranch embodies a lifestyle centered on meaningful relationships, adventure, and authentic Western luxury. With exceptional accommodations, dining, and outdoor experiences, the Ranch provided the ideal setting for the Real Estate Invitational. More than a venue, it offered an extraordinary backdrop for the real estate industry’s most respected executives to compete, connect, and build lasting relationships.',
     ],
   },
   details: {
     heading: 'Course details',
     items: [
-      'This is it',
-      'Something else',
-      'Something else',
-      'Again, something else',
-      'Trying something else',
-      'And again... something else.',
+      'Victor, ID',
+      'Par 72',
+      'Blue Tees: 6,500 Yards',
+      '#5 Ranked Course in Idaho by Golf Digest',
+      'Private Club',
     ],
   },
   photos: {
