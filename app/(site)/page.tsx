@@ -1,5 +1,4 @@
 import About from '@/components/home/About'
-import Faq from '@/components/home/Faq'
 import Hero from '@/components/Hero'
 import Testimonials from '@/components/home/Testimonials'
 import HomeIntro from '@/components/intro/HomeIntro'
@@ -14,7 +13,6 @@ export default function HomePage() {
         <RevealOnScroll>
           <div>
             <About {...home.about} />
-            <Faq {...home.faq} />
             <Testimonials {...home.testimonials} />
           </div>
         </RevealOnScroll>

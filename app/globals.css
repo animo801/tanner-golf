@@ -159,19 +159,4 @@ body {
     opacity: 0;
     transform: translateX(64px);
   }
-
-  /* FAQ answers ease open instead of snapping (browsers that support it) */
-  :root {
-    interpolate-size: allow-keywords;
-  }
-  details::details-content {
-    block-size: 0;
-    overflow: hidden;
-    transition:
-      block-size 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-      content-visibility 0.4s allow-discrete;
-  }
-  details[open]::details-content {
-    block-size: auto;
-  }
 }

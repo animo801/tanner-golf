@@ -22,14 +22,15 @@ export type SiteSettings = {
   footerText: string
 }
 
-export type FaqItem = { question: string; answer: string }
-export type Testimonial = { quote: string; name: string; role?: string; photo?: Photo }
+// Each string in `quote` is a paragraph
+export type Testimonial = { quote: string[]; name: string; photo?: Photo }
 
 export type HomePage = {
   hero: { heading: string; image: Photo }
   about: { heading: string; body: string[]; images: Photo[] }
-  faq: { heading: string; items: FaqItem[] }
-  testimonials: { heading: string; items: Testimonial[] }
+  // Cards are stacked into columns that all share the height of the tallest,
+  // so group quotes so each column holds about the same amount of text
+  testimonials: { heading: string; labels: { previous: string; next: string }; columns: Testimonial[][] }
 }
 
 export type WaitlistPage = {
